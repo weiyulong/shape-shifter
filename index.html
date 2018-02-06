@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body {
+      background:-webkit-linear-gradient(top,#cbebdb 0,#3794c0 120%);background:-moz-linear-gradient(top,#cbebdb 0,#3794c0 120%);background:-o-linear-gradient(top,#cbebdb 0,#3794c0 120%);background:linear-gradient(top,#cbebdb 0,#3794c0 120%);
+      margin: 0;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+  <script src="Shifter.js"></script>
+  <script>
+    window.addEventListener('load', function () {
+      Shifter.init('#canvas',{default:'10086|#image ./image/a.jpg|#circle 50|#rectangle 50x50|#time|#icon heart|#countdown 3'});
+    });
+  </script>
+</head>
+
+<body>
+  <canvas id="canvas"></canvas>
+</body>
+
+</html>
