@@ -12,16 +12,32 @@ let Shifter = {
   }
 }
 
+/**
+ * 执行命令
+ */
 Shifter.Commands = (function () {
   let interval, currentAction, time,
     maxShapeSize = 30,
     sequence = []
+
+  /**
+   * 格式化时间
+   * @param {date} date 
+   */
   function formatTime (date) {
     var h = date.getHours().toString(),
       m = date.getMinutes().toString(),
       s = date.getSeconds().toString()
     return `${h.padStart(2, '0')}:${m.padStart(2, '0')}:${s.padStart(2, '0')}`
   }
+
+  /**
+   * 定时动作
+   * @param {function} fn 
+   * @param {number} delay 
+   * @param {number} max 
+   * @param {boolean} reverse 
+   */
   function timedAction (fn, delay, max, reverse) {
     clearInterval(interval)
     currentAction = reverse ? max : 1
@@ -36,6 +52,11 @@ Shifter.Commands = (function () {
       }, delay)
     }
   }
+
+  /**
+   * 获取动作
+   * @param {string} command 
+   */
   function getAction (command) {
     let action = { name: 'text', value: '' }
     if (command.slice(0, 1) === '#') {
@@ -52,6 +73,11 @@ Shifter.Commands = (function () {
     }
     return action
   }
+
+  /**
+   * 执行命令
+   * @param {string} commands 
+   */
   function execute (commands) {
     let action, current
     sequence = Array.isArray(commands) ? commands : sequence.concat(commands.split('|'))
@@ -180,6 +206,13 @@ Shifter.Point = function (args) {
   this.h = args.h
 }
 
+/**
+ * 生成点的初始颜色
+ * @param {number} red 
+ * @param {number} green 
+ * @param {number} blue 
+ * @param {number} alpha 
+ */
 Shifter.Color = function (red, green, blue, alpha) {
   this.red = red
   this.green = green
@@ -281,11 +314,15 @@ Shifter.Dot.prototype = {
 }
 
 Shifter.Builder = (function () {
-  let gap = 13,
+  let gap = 15,
     shapeCanvas = document.createElement('canvas'),
     shapeContext = shapeCanvas.getContext('2d'),
     fontSize = 500,
     fontFamily = 'Avenir, Helvetica Neue, Helvetica, Arial, sans-serif'
+
+  /**
+   * 适配
+   */
   function fit () {
     shapeCanvas.width = Math.floor(window.innerWidth / gap) * gap
     shapeCanvas.height = Math.floor(window.innerHeight / gap) * gap
@@ -293,9 +330,21 @@ Shifter.Builder = (function () {
     shapeContext.textBaseline = 'middle'
     shapeContext.textAlign = 'center'
   }
+
+  /**
+   * 获取灰度值
+   * @param {number} red 
+   * @param {number} green 
+   * @param {number} blue 
+   */
   function getGray (red, green, blue) {
     return 0.299 * red + 0.578 * green + 0.114 * blue;
   }
+
+  /**
+   * 根据灰度生成半径
+   * @param {number} gray 
+   */
   function getRadius (gray) {
     if (gray <= 40) {
       return 6
@@ -313,6 +362,14 @@ Shifter.Builder = (function () {
       return 0
     }
   }
+
+  /**
+   * 等比缩放图片尺寸
+   * @param {number} imgWidth 
+   * @param {number} imgHeight 
+   * @param {number} containerWidth 
+   * @param {number} containerHeight 
+   */
   function scalingImage (imgWidth, imgHeight, containerWidth, containerHeight) {
     var containerRatio = containerWidth / containerHeight
     var imgRatio = imgWidth / imgHeight
@@ -349,6 +406,10 @@ Shifter.Builder = (function () {
     return { dots, w: w + fx, h: h + fy }
   }
 
+  /**
+   * 设置字体大小
+   * @param {number} size 
+   */
   function setFontSize (size) {
     shapeContext.font = 'bold ' + size + 'px ' + fontFamily
   }
